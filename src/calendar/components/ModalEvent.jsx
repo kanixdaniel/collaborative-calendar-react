@@ -1,9 +1,11 @@
-import { addHours } from 'date-fns';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { addHours, differenceInSeconds } from 'date-fns';
+import Swal from 'sweetalert2';
 import Modal from 'react-modal';
 import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { es } from 'date-fns/locale';
+import "react-datepicker/dist/react-datepicker.css";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 registerLocale('es', es);
 
@@ -22,12 +24,19 @@ Modal.setAppElement('#root');
 
 export const ModalEvent = () => {
     const [isOpen, setIsOpen] = useState(true);
+    const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValues, setFormValues] = useState({
         title: 'Cumpleaños Mateo',
         notes: 'Falta el pastel',
         start: new Date(),
         end: addHours(new Date(), 2),
     });
+    const titleClass = useMemo(() => {
+        if (!formSubmitted) return '';
+        return (formValues.title.length > 0)
+            ? ''
+            : 'is-invalid'
+    }, [formValues.title, formSubmitted])
 
     const onInputChange = ({ target }) => {
         const { value, name } = target;
@@ -42,6 +51,23 @@ export const ModalEvent = () => {
             ...formValues,
             [dateType]: value
         });
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        setFormSubmitted(true);
+
+        const difference = differenceInSeconds(formValues.end, formValues.start);
+        if(isNaN(difference) || difference < 0) {
+            Swal.fire('Fecha y hora erronea', 'Por favor, valide las fechas y horas de inicio y fin del evento', 'error');
+            return;
+        }
+
+        if(formValues.title.length <= 0) return;
+
+        console.log(formValues);
+
+        // TODO: cerrar form y borrar errores en pantalla
     }
 
     const onCloseModal = () => {
@@ -60,7 +86,7 @@ export const ModalEvent = () => {
             <div className="container">
                 <h1 className="fs-3 mt-1"> Nuevo evento </h1>
                 <hr />
-                <form>
+                <form onSubmit={onSubmit}>
                     <h2 className="fs-5 mb-3">Horario</h2>
                     <div className="form-group mb-2">
                         <label>Fecha y hora inicio</label>
@@ -98,7 +124,7 @@ export const ModalEvent = () => {
                         <label className="form-label">Título del evento</label>
                         <input
                             type="text"
-                            className="form-control"
+                            className={`form-control ${titleClass}`}
                             placeholder="Una descripción corta"
                             name="title"
                             autoComplete="off"

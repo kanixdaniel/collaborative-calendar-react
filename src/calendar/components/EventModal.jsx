@@ -25,7 +25,7 @@ Modal.setAppElement('#root');
 
 export const EventModal = () => {
     const { isEventModalOpen, closeEventModal } = useUiStore();
-    const { activeEvent } = useCalendarStore();
+    const { activeEvent, startSavingEvent } = useCalendarStore();
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const [formValues, setFormValues] = useState({
@@ -64,7 +64,7 @@ export const EventModal = () => {
         });
     }
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         setFormSubmitted(true);
 
@@ -78,8 +78,9 @@ export const EventModal = () => {
 
         console.log(formValues);
 
-        // TODO: cerrar form y borrar errores en pantalla
-        // closeEventModal();
+        await startSavingEvent(formValues);
+        closeEventModal();
+        setFormSubmitted(false);
     }
 
     const onCloseModal = () => {

@@ -22,7 +22,7 @@ const customStyles = {
 
 Modal.setAppElement('#root');
 
-export const ModalEvent = () => {
+export const EventModal = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValues, setFormValues] = useState({

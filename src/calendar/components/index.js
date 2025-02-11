@@ -1,3 +1,3 @@
 export * from './EventBox';
-export * from './ModalEvent';
+export * from './EventModal';
 export * from './Navbar';

@@ -1,3 +1,4 @@
+/* Estilos del calendario */
 .rbc-calendar {
     button {
         color: beige;
@@ -6,9 +7,50 @@
         color: dimgray;
     }
     .rbc-off-range-bg {
-        background-color: dimgray;
+        background-color: #6c757d;
     }
     .rbc-today {
-        background-color: cadetblue;
+        background-color: #003566;
     }
+}
+
+/* Estilos del Modal */
+.ReactModalPortal > div{
+    opacity: 0;
+}
+
+.ReactModalPortal .ReactModal__Overlay {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    transition: opacity .2s ease-in-out;
+    z-index: 999;
+}
+
+.background-modal {
+    background-color: rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    position: fixed;
+}
+
+.ReactModalPortal .ReactModal__Overlay--after-open {
+    opacity: 1;
+}
+
+.ReactModalPortal .ReactModal__Overlay--before-close {
+    opacity: 0;
+}
+
+.modal {
+    background: #adb5bd;
+    border-radius: 5px;
+    color: rgb(51, 51, 51);
+    display: inline;
+    max-height: 620px;
+    max-width: 500px;
+    outline: none;
+    padding: 10px;
 }

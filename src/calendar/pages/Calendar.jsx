@@ -2,7 +2,7 @@ import { Calendar as FullCalendar } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { addHours } from 'date-fns';
 import { getMessagesEs, localizer } from '../helpers';
-import { EventBox, Navbar } from "../components"
+import { EventBox, ModalEvent, Navbar } from "../components"
 import { useState } from 'react';
 
 const events = [
@@ -58,6 +58,7 @@ export const Calendar = () => {
                 onSelectEvent={onSelect}
                 onView={onViewChanged}
             />
+            <ModalEvent />
         </>
     )
 }

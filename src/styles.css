@@ -1,0 +1,14 @@
+.rbc-calendar {
+    button {
+        color: beige;
+    }
+    button.rbc-active {
+        color: dimgray;
+    }
+    .rbc-off-range-bg {
+        background-color: dimgray;
+    }
+    .rbc-today {
+        background-color: cadetblue;
+    }
+}

@@ -4,24 +4,11 @@ import { addHours } from 'date-fns';
 import { getMessagesEs, localizer } from '../helpers';
 import { EventBox, EventModal, Navbar } from "../components"
 import { useState } from 'react';
-import { useUiStore } from '../../hooks';
-
-const events = [
-    {
-        title: 'Cumpleaños Rola',
-        notes: 'El pastel',
-        start: new Date(),
-        end: addHours(new Date(), 2),
-        bgColor: '#fafafa',
-        user: {
-            _id: '123',
-            name: 'Daniel'
-        }
-    }
-]
+import { useCalendarStore, useUiStore } from '../../hooks';
 
 export const Calendar = () => {
     const { openEventModal } = useUiStore();
+    const { events } = useCalendarStore()
     const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
 
     const eventStyleGetter = (event, start, end, isSelected) => {

@@ -6,6 +6,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
 import "sweetalert2/dist/sweetalert2.min.css";
+import { useUiStore } from '../../hooks';
 
 registerLocale('es', es);
 
@@ -23,7 +24,7 @@ const customStyles = {
 Modal.setAppElement('#root');
 
 export const EventModal = () => {
-    const [isOpen, setIsOpen] = useState(true);
+    const { isEventModalOpen, closeEventModal } = useUiStore();
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValues, setFormValues] = useState({
         title: 'Cumpleaños Mateo',
@@ -59,7 +60,7 @@ export const EventModal = () => {
 
         const difference = differenceInSeconds(formValues.end, formValues.start);
         if(isNaN(difference) || difference < 0) {
-            Swal.fire('Fecha y hora erronea', 'Por favor, valide las fechas y horas de inicio y fin del evento', 'error');
+            Swal.fire('Fecha y hora errónea', 'Por favor, valide las fechas y horas de inicio y fin del evento', 'error');
             return;
         }
 
@@ -68,15 +69,16 @@ export const EventModal = () => {
         console.log(formValues);
 
         // TODO: cerrar form y borrar errores en pantalla
+        // closeEventModal();
     }
 
     const onCloseModal = () => {
-        setIsOpen(false);
+        closeEventModal();
     }
 
     return (
         <Modal
-            isOpen={isOpen}
+            isOpen={isEventModalOpen}
             onRequestClose={onCloseModal}
             style={customStyles}
             className="modal"

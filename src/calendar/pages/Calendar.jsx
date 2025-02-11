@@ -2,7 +2,7 @@ import { Calendar as FullCalendar } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { addHours } from 'date-fns';
 import { getMessagesEs, localizer } from '../helpers';
-import { Navbar } from "../components"
+import { EventBox, Navbar } from "../components"
 
 const events = [
     {
@@ -20,7 +20,6 @@ const events = [
 
 export const Calendar = () => {
     const eventStyleGetter = (event, start, end, isSelected) => {
-        console.log({ event, start, end, isSelected })
     }
 
     return (
@@ -35,6 +34,9 @@ export const Calendar = () => {
                 endAccessor="end"
                 style={{ height: 'calc(100vh - 80px)' }}
                 eventPropGetter={eventStyleGetter}
+                components={{
+                    event: EventBox
+                }}
             />
         </>
     )

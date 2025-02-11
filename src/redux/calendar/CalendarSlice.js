@@ -6,6 +6,7 @@ export const calendarSlice = createSlice({
     initialState: {
         events: [
             {
+                _id: new Date().getTime(),
                 title: 'Cumpleaños Rola',
                 notes: 'El pastel',
                 start: new Date(),
@@ -20,10 +21,12 @@ export const calendarSlice = createSlice({
         activeEvent: null,
     },
     reducers: {
-        action: (state, /* action */) => {
-
+        onSetActiveEvent: (state, { payload }) => {
+            state.activeEvent = payload;
         },
     }
 });
 
-export const { action } = calendarSlice.actions;
+export const {
+    onSetActiveEvent,
+} = calendarSlice.actions;

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { addHours, differenceInSeconds } from 'date-fns';
 import Swal from 'sweetalert2';
 import Modal from 'react-modal';
@@ -6,7 +6,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import { es } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
 import "sweetalert2/dist/sweetalert2.min.css";
-import { useUiStore } from '../../hooks';
+import { useCalendarStore, useUiStore } from '../../hooks';
 
 registerLocale('es', es);
 
@@ -25,19 +25,29 @@ Modal.setAppElement('#root');
 
 export const EventModal = () => {
     const { isEventModalOpen, closeEventModal } = useUiStore();
+    const { activeEvent } = useCalendarStore();
     const [formSubmitted, setFormSubmitted] = useState(false);
+
     const [formValues, setFormValues] = useState({
-        title: 'Cumpleaños Mateo',
-        notes: 'Falta el pastel',
+        title: '',
+        notes: '',
         start: new Date(),
         end: addHours(new Date(), 2),
     });
+
     const titleClass = useMemo(() => {
         if (!formSubmitted) return '';
         return (formValues.title.length > 0)
             ? ''
             : 'is-invalid'
-    }, [formValues.title, formSubmitted])
+    }, [formValues.title, formSubmitted]);
+
+    useEffect(() => {
+        if(activeEvent !== null) {
+            setFormValues({...activeEvent});
+        }
+    }, [activeEvent])
+
 
     const onInputChange = ({ target }) => {
         const { value, name } = target;
@@ -59,12 +69,12 @@ export const EventModal = () => {
         setFormSubmitted(true);
 
         const difference = differenceInSeconds(formValues.end, formValues.start);
-        if(isNaN(difference) || difference < 0) {
+        if (isNaN(difference) || difference < 0) {
             Swal.fire('Fecha y hora errónea', 'Por favor, valide las fechas y horas de inicio y fin del evento', 'error');
             return;
         }
 
-        if(formValues.title.length <= 0) return;
+        if (formValues.title.length <= 0) return;
 
         console.log(formValues);
 

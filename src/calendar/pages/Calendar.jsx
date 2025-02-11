@@ -8,7 +8,7 @@ import { useCalendarStore, useUiStore } from '../../hooks';
 
 export const Calendar = () => {
     const { openEventModal } = useUiStore();
-    const { events } = useCalendarStore()
+    const { events, setActiveEvent } = useCalendarStore()
     const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
 
     const eventStyleGetter = (event, start, end, isSelected) => {
@@ -16,11 +16,10 @@ export const Calendar = () => {
 
     const onDoubleClick = (event) => {
         openEventModal();
-        console.log({doubleClick: event})
     }
-
+    
     const onSelect = (event) => {
-        console.log({click: event})
+        setActiveEvent(event);
     }
 
     const onViewChanged = (viewSelected) => {

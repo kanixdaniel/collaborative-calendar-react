@@ -54,3 +54,14 @@
     outline: none;
     padding: 10px;
 }
+
+/* Fab */
+.fab {
+    border-radius: 100%;
+    right: 1.6rem;
+    bottom: 1.2rem;
+    font-size: 1.8rem;
+    padding: 0.7rem;
+    position: fixed;
+    z-index: 10;
+}

@@ -25,7 +25,7 @@ Modal.setAppElement('#root');
 
 export const EventModal = () => {
     const { isEventModalOpen, closeEventModal } = useUiStore();
-    const { activeEvent, startSavingEvent } = useCalendarStore();
+    const { activeEvent, startSavingEvent, startDeleteEvent } = useCalendarStore();
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const [formValues, setFormValues] = useState({
@@ -43,8 +43,8 @@ export const EventModal = () => {
     }, [formValues.title, formSubmitted]);
 
     useEffect(() => {
-        if(activeEvent !== null) {
-            setFormValues({...activeEvent});
+        if (activeEvent !== null) {
+            setFormValues({ ...activeEvent });
         }
     }, [activeEvent])
 
@@ -83,14 +83,15 @@ export const EventModal = () => {
         setFormSubmitted(false);
     }
 
-    const onCloseModal = () => {
+    const onDeleteEvent = async () => {
+        await startDeleteEvent();
         closeEventModal();
     }
 
     return (
         <Modal
             isOpen={isEventModalOpen}
-            onRequestClose={onCloseModal}
+            onRequestClose={closeEventModal}
             style={customStyles}
             className="modal"
             overlayClassName="background-modal"
@@ -158,13 +159,31 @@ export const EventModal = () => {
                         ></textarea>
                     </div>
 
-                    <button
-                        type="submit"
-                        className="btn btn-primary d-block"
-                    >
-                        <i className="far fa-save"></i>
-                        <span> Guardar</span>
-                    </button>
+                    <div className="row justify-content-between">
+                        {
+                            !!activeEvent?._id && (
+                                <div className="col">
+                                    <button
+                                        onClick={onDeleteEvent}
+                                        className="btn btn-danger"
+                                    >
+                                        <span>Eliminar</span>
+                                        <i className="fas fa-trash ms-2"></i>
+                                    </button>
+                                </div>
+                            )
+                        }
+
+                        <div className="col text-end">
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                            >
+                                <span> Guardar</span>
+                                <i className="fas fa-save ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </Modal>

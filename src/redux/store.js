@@ -6,5 +6,9 @@ export const store = configureStore({
     reducer: {
         calendar: calendarSlice.reducer,
         ui: uiSlice.reducer,
-    }
+    },
+    // Evita la revisión de valores que no se puedes serializar (como fechas)
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+    })
 })

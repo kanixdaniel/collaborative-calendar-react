@@ -1,17 +1,27 @@
 import { Link } from "react-router"
-import { useForm } from "../../hooks"
+import { useAuthStore, useForm } from "../../hooks"
+import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 const initialState = {
-    email: 'kanix@gmail.com',
-    password: 'ElPapi_3037'
+    email: '',
+    password: ''
 };
 
 export const Login = () => {
     const { email, password, formState, onInputChange, onResetForm } = useForm(initialState);
+    const { errorMessage, startLogin } = useAuthStore();
+
+    useEffect(() => {
+        if(!!errorMessage) {
+            Swal.fire('Ha ocurrido un problema', errorMessage, 'error');
+        }
+    }, [errorMessage])
+    
 
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log(formState);
+        startLogin(formState);
     }
 
     return (

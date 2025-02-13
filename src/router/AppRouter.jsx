@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router"
 import { AuthRouter } from "../auth";
 import { CalendarRouter } from "../calendar";
+import { getEnvVariables } from "../shared/helpers";
 
 export const AppRouter = () => {
     const authStatus = 'authenticated';

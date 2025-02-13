@@ -11,7 +11,7 @@ export const AppRouter = () => {
 
     if (status === 'checking') {
         return (
-            <div className="d-flex justify-content-center h-100">
+            <div className="d-flex justify-content-center vh-100">
                 <div className="spinner-grow my-auto">
                     <span className="visually-hidden">Loading...</span>
                 </div>

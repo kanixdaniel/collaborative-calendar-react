@@ -7,7 +7,7 @@ export const Navbar = () => {
         <div className="navbar mb-4 px-4">
             <span>
                 <i className="fas fa-calendar-alt"></i>
-                &nbsp;
+                &nbsp;&nbsp;
                 {user.fullName}
             </span>
             <button onClick={startLogout} className="btn btn-outline-danger">

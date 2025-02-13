@@ -23,7 +23,7 @@ export const FabAddNewEvent = () => {
     }
 
     return (
-        <button className="btn btn-primary fab" onClick={onNewEvent}>
+        <button className="btn btn-primary fab d-none d-md-block" onClick={onNewEvent}>
             <i className="fas fa-plus"></i>
         </button>
     )

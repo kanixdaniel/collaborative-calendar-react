@@ -1,7 +1,7 @@
 import { Calendar as FullCalendar } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getMessagesEs, localizer } from '../helpers';
-import { EventBox, EventModal, FabAddNewEvent, Navbar } from "../components"
+import { AdviseResponsiveView, EventBox, EventModal, FabAddNewEvent, Navbar } from "../components"
 import { useState } from 'react';
 import { useCalendarStore, useUiStore } from '../../hooks';
 
@@ -45,9 +45,11 @@ export const Calendar = () => {
                 onDoubleClickEvent={onDoubleClick}
                 onSelectEvent={onSelect}
                 onView={onViewChanged}
+                className="d-none d-md-block"
             />
             <EventModal />
             <FabAddNewEvent />
+            <AdviseResponsiveView />
         </>
     )
 }

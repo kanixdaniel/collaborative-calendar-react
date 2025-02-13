@@ -112,6 +112,7 @@ export const EventModal = () => {
                             showTimeSelect
                             className="form-control"
                             wrapperClassName="w-100"
+                            placeholderText="Seleccione una fecha de inicio"
                         />
                     </div>
 
@@ -127,6 +128,7 @@ export const EventModal = () => {
                             showTimeSelect
                             className="form-control"
                             wrapperClassName="w-100"
+                            placeholderText="Seleccione una fecha de finalización"
                         />
                     </div>
                     <hr />

@@ -12,7 +12,6 @@ export const FabAddNewEvent = () => {
             notes: '',
             start: undefined,
             end: undefined,
-            bgColor: '#fafafa'
         });
         openEventModal()
     }

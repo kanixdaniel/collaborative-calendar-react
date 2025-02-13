@@ -3,10 +3,11 @@ import { Calendar as FullCalendar } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getMessagesEs, localizer } from '../helpers';
 import { AdviseResponsiveView, EventBox, EventModal, FabAddNewEvent, Navbar } from "../components"
-import { useCalendarStore, useUiStore } from '../../hooks';
+import { useAuthStore, useCalendarStore, useUiStore } from '../../hooks';
 
 export const Calendar = () => {
     const { openEventModal } = useUiStore();
+    const { user } = useAuthStore();
     const { events, startLoadingEvents, startActiveEvent } = useCalendarStore()
     const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
 
@@ -14,6 +15,13 @@ export const Calendar = () => {
     
 
     const eventStyleGetter = (event, start, end, isSelected) => {
+        const isMyEvent = user._id === event.user._id;
+
+        const style = {
+            backgroundColor: isMyEvent ? '#347CF7' : '#465660'
+        }
+
+        return { style };
     }
 
     const onDoubleClick = (event) => {

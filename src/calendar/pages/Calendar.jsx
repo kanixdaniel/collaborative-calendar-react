@@ -1,14 +1,17 @@
+import { useEffect, useState } from 'react';
 import { Calendar as FullCalendar } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getMessagesEs, localizer } from '../helpers';
 import { AdviseResponsiveView, EventBox, EventModal, FabAddNewEvent, Navbar } from "../components"
-import { useState } from 'react';
 import { useCalendarStore, useUiStore } from '../../hooks';
 
 export const Calendar = () => {
     const { openEventModal } = useUiStore();
-    const { events, setActiveEvent } = useCalendarStore()
+    const { events, startLoadingEvents, startActiveEvent } = useCalendarStore()
     const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
+
+    useEffect(() => { startLoadingEvents() }, [])
+    
 
     const eventStyleGetter = (event, start, end, isSelected) => {
     }
@@ -18,7 +21,7 @@ export const Calendar = () => {
     }
     
     const onSelect = (event) => {
-        setActiveEvent(event);
+        startActiveEvent(event);
     }
 
     const onViewChanged = (viewSelected) => {
@@ -45,7 +48,7 @@ export const Calendar = () => {
                 onDoubleClickEvent={onDoubleClick}
                 onSelectEvent={onSelect}
                 onView={onViewChanged}
-                className="d-none d-md-block"
+                className="d-none d-md-flex"
             />
             <EventModal />
             <FabAddNewEvent />

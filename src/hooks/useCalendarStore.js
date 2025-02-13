@@ -1,17 +1,30 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { onAddNewEvent, onDeleteEvent, onSetActiveEvent, onUpdateEvent } from '../redux/calendar';
+import { onAddNewEvent, onDeleteEvent, onLoadingEvents, onSetActiveEvent, onSetEvents, onUpdateEvent } from '../redux/calendar';
 import { calendarApi } from '../api';
+import { convertDateOfEvents } from '../calendar/helpers';
 
 export const useCalendarStore = () => {
     const dispatch = useDispatch();
-    const { events, activeEvent } = useSelector(store => store.calendar);
+    const { events, activeEvent, isLoadingEvents } = useSelector(store => store.calendar);
     const { user } = useSelector(store => store.auth);
 
-    const setActiveEvent = (calendarEvent) => {
+    const startLoadingEvents = async () => {
+        try {
+            dispatch(onLoadingEvents());
+            const { data } = await calendarApi.get('/v1/events');
+            const events = convertDateOfEvents(data.events)
+            dispatch(onSetEvents(events));
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const startActiveEvent = (calendarEvent) => {
         dispatch(onSetActiveEvent(calendarEvent));
     }
 
     const startSavingEvent = async (calendarEvent) => {
+        dispatch(onLoadingEvents());
         try {
             if (calendarEvent._id) {
                 // Actualizar
@@ -23,11 +36,12 @@ export const useCalendarStore = () => {
                 dispatch(onAddNewEvent({... calendarEvent, id: event.id, user}))
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
     }
 
-    const startDeleteEvent =  async () => {
+    const startDeleteEvent = async () => {
+        dispatch(onLoadingEvents());
         // TODO: usar API
 
         dispatch(onDeleteEvent());
@@ -37,8 +51,10 @@ export const useCalendarStore = () => {
         // Properties
         activeEvent,
         events,
+        isLoadingEvents,
         // Methods
-        setActiveEvent,
+        startLoadingEvents,
+        startActiveEvent,
         startSavingEvent,
         startDeleteEvent,
     }

@@ -9,18 +9,32 @@ const initialState = {
 };
 
 export const Login = () => {
-    const { email, password, formState, onInputChange, onResetForm } = useForm(initialState);
+    const { email, emailError, password, formState, isPristine, onInputChange, onResetForm } = useForm(initialState);
     const { errorMessage, startLogin } = useAuthStore();
 
     useEffect(() => {
-        if(!!errorMessage) {
+        if (!!errorMessage) {
             Swal.fire('Ha ocurrido un problema', errorMessage, 'error');
         }
     }, [errorMessage])
-    
+
 
     const onSubmit = (e) => {
         e.preventDefault();
+        if (isPristine) {
+            return Swal.fire(
+                'Error en formulario',
+                'Debe ingresar información en el formulario',
+                'error'
+            );
+        } else if (emailError) {
+            return Swal.fire(
+                'Error en formulario',
+                'El correo electrónico ingresado no tiene el formato correcto',
+                'error'
+            )
+        }
+
         startLogin(formState);
     }
 

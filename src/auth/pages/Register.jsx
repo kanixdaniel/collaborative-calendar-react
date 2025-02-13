@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { useEffect } from "react";
 
 const initialState = {
-    fullName: 'Daniel Perez Gonzalez',
+    fullName: '',
     email: '',
     password: '',
     samePassword: '',
@@ -64,8 +64,8 @@ export const Register = () => {
 
     return (
         <div className="container-fluid">
-            <div className="row justify-content-center align-items-center">
-                <div className="col-md-6">
+            <div className="row justify-content-center align-items-center bg-dark px-2 vh-100">
+                <div className="col-md-4 col-lg-3 bg-primary rounded-4 p-4">
                     <h3 className="text-center mb-4">Registro</h3>
                     <form onSubmit={onSubmit}>
                         <div className="form-group mb-3">
@@ -110,11 +110,11 @@ export const Register = () => {
                             />
                         </div>
 
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-light mb-3">
                             Crear cuenta
                         </button>
                     </form>
-                    <p className="text-end">¿Ya tienes una cuenta? <Link to="/auth/login">Inicia sesión</Link></p>
+                    <p className="text-end">¿Ya tienes una cuenta? <Link className="text-light" to="/auth/login">Inicia sesión</Link></p>
                 </div>
             </div>
         </div>

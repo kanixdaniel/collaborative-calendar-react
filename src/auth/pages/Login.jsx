@@ -40,8 +40,8 @@ export const Login = () => {
 
     return (
         <div className="container-fluid">
-            <div className="row align-items-center justify-content-center">
-                <div className="col-md-6">
+            <div className="row align-items-center justify-content-center bg-warning px-2 vh-100">
+                <div className="col-md-4 col-lg-3 bg-dark rounded-4 p-4">
                     <h3 className="mb-4">Ingreso</h3>
                     <form onSubmit={onSubmit}>
                         <div className="form-group mb-3">
@@ -64,13 +64,13 @@ export const Login = () => {
                                 onChange={onInputChange}
                             />
                         </div>
-                        <div className="form-group mb-2">
-                            <button type="submit" className="btn btn-primary">
+                        <div className="form-group mb-3">
+                            <button type="submit" className="btn btn-warning">
                                 Iniciar sesión
                             </button>
                         </div>
                     </form>
-                    <p className="text-end">¿No tienes cuenta? <Link to="/auth/register">Crea una</Link></p>
+                    <p className="text-end">¿No tienes cuenta? <Link className="text-warning" to="/auth/register">Crea una</Link></p>
                 </div>
             </div>
         </div>

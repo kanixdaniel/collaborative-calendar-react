@@ -4,7 +4,7 @@ export const EventBox = ({ event }) => {
     return (
         <>
             <strong>{title}</strong>
-            <span> - {user.name}</span>
+            <span> - {user.fullName}</span>
         </>
     )
 }

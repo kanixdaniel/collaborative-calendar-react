@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { onAddNewEvent, onDeleteEvent, onLoadingEvents, onSetActiveEvent, onSetEvents, onUpdateEvent } from '../redux/calendar';
+import { onAddNewEvent, onDeleteEvent, onSetLoadingEvents, onSetActiveEvent, onSetEvents, onUpdateEvent } from '../redux/calendar';
 import { calendarApi } from '../api';
 import { convertDateOfEvents } from '../calendar/helpers';
 import Swal from 'sweetalert2';
@@ -11,11 +11,12 @@ export const useCalendarStore = () => {
 
     const startLoadingEvents = async () => {
         try {
-            dispatch(onLoadingEvents());
+            dispatch(onSetLoadingEvents(true));
             const { data } = await calendarApi.get('/v1/events');
             const events = convertDateOfEvents(data.events)
             dispatch(onSetEvents(events));
         } catch (error) {
+            dispatch(onSetLoadingEvents(false));
             console.error(error);
             Swal.fire('Error al obtener los eventos', error.response.data.message, 'error');
         }
@@ -26,7 +27,7 @@ export const useCalendarStore = () => {
     }
 
     const startSavingEvent = async (calendarEvent) => {
-        dispatch(onLoadingEvents());
+        dispatch(onSetLoadingEvents(true));
         try {
             if (calendarEvent.id) {
                 // Actualizar
@@ -40,16 +41,23 @@ export const useCalendarStore = () => {
             const { event } = data;
             dispatch(onAddNewEvent({ ...calendarEvent, id: event.id, user }))
         } catch (error) {
+            dispatch(onSetLoadingEvents(false));
             console.error(error);
             Swal.fire('Error al guardar', error.response.data.message, 'error');
         }
     }
 
     const startDeleteEvent = async () => {
-        dispatch(onLoadingEvents());
-        // TODO: usar API
-
-        dispatch(onDeleteEvent());
+        dispatch(onSetLoadingEvents(true));
+        try {
+            await calendarApi.delete(`/v1/events/${activeEvent.id}`);
+            dispatch(onDeleteEvent());
+            Swal.fire('Se ha eliminado el evento', '', 'success');
+        } catch (error) {
+            dispatch(onSetLoadingEvents(false));
+            console.error(error);
+            Swal.fire('Error al eliminar el evento', error.response.data.message, 'error');
+        }
     }
 
     return {

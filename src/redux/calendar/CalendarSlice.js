@@ -8,8 +8,8 @@ export const calendarSlice = createSlice({
         activeEvent: null,
     },
     reducers: {
-        onLoadingEvents: (state) => {
-            state.isLoadingEvents = true;
+        onSetLoadingEvents: (state, { payload }) => {
+            state.isLoadingEvents = payload;
         },
         onSetEvents: (state, { payload = [] }) => {
             state.isLoadingEvents = false;
@@ -41,7 +41,7 @@ export const calendarSlice = createSlice({
 });
 
 export const {
-    onLoadingEvents,
+    onSetLoadingEvents,
     onSetEvents,
     onSetActiveEvent,
     onAddNewEvent,

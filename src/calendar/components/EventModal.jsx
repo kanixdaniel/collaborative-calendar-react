@@ -81,9 +81,23 @@ export const EventModal = () => {
         setFormSubmitted(false);
     }
 
-    const onDeleteEvent = async () => {
-        await startDeleteEvent();
-        closeEventModal();
+    const onDeleteEvent = (e) => {
+        e.preventDefault();
+        Swal.fire({
+            title: "¿Está seguro de eliminar el evento?",
+            text: "Esta acción no se puede deshacer",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#0D6EFD",
+            cancelButtonColor: "#DC3545",
+            confirmButtonText: "Eliminar evento",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                startDeleteEvent();
+                closeEventModal();
+            }
+        });
     }
 
     return (

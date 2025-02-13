@@ -1,18 +1,32 @@
 import { Navigate, Route, Routes } from "react-router"
 import { AuthRouter } from "../auth";
 import { CalendarRouter } from "../calendar";
+import { useAuthStore } from "../hooks";
+import { useEffect } from "react";
 
 export const AppRouter = () => {
-    const authStatus = 'not-authenticated';
+    const { status, startCheckAuthToken } = useAuthStore();
+
+    useEffect(() => { startCheckAuthToken() }, [])
+
+    if (status === 'checking') {
+        return (
+            <div className="d-flex justify-content-center h-100">
+                <div className="spinner-grow my-auto">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <Routes>
             {
-                (authStatus === 'not-authenticated')
+                (status === 'not-authenticated')
                     ? <Route path="/auth/*" element={<AuthRouter />} />
                     : <Route path="/*" element={<CalendarRouter />} />
             }
-            <Route path="/*" element={ <Navigate to="/auth/login" /> } />
+            <Route path="/*" element={<Navigate to="/auth/login" />} />
         </Routes>
     )
 }

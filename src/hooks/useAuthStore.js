@@ -44,6 +44,27 @@ export const useAuthStore = () => {
         }
     }
 
+    const startCheckAuthToken = async () => {
+        const token = sessionStorage.getItem('token');
+        if(!token) return dispatch(onLogout());
+
+        try {
+            const { data } = await calendarApi.get('/v1/auth/renew-token');
+            const { token, fullName, uid } = data;
+            sessionStorage.setItem('token', token);
+            sessionStorage.setItem('token-init-date', new Date().getTime());
+            dispatch(onClearErrorMessage());
+            dispatch(onLogin({ fullName, uid }));
+        } catch (error) {
+            sessionStorage.clear();
+            console.error(error);
+            dispatch(onLogout(error.response.data.message));
+            setTimeout(() => {
+                dispatch(onClearErrorMessage());
+            }, 10);
+        }
+    }
+
     return {
         // Properties
         status,
@@ -52,5 +73,6 @@ export const useAuthStore = () => {
         // Methods
         startLogin,
         startRegister,
+        startCheckAuthToken,
     }
 }

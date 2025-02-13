@@ -29,12 +29,12 @@ export const calendarSlice = createSlice({
         },
         onUpdateEvent: (state, { payload }) => {
             state.isLoadingEvents = false;
-            state.events = state.events.map(event => event._id !== payload._id ? event : payload);
+            state.events = state.events.map(event => event.id !== payload.id ? event : payload);
             state.activeEvent = null;
         },
         onDeleteEvent: (state) => {
             state.isLoadingEvents = false;
-            state.events = state.events.filter(event => event._id !== state.activeEvent._id);
+            state.events = state.events.filter(event => event.id !== state.activeEvent.id);
             state.activeEvent = null;
         },
     }

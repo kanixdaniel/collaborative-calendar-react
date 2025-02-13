@@ -25,7 +25,7 @@ Modal.setAppElement('#root');
 
 export const EventModal = () => {
     const { isEventModalOpen, closeEventModal } = useUiStore();
-    const { activeEvent, startSavingEvent, startDeleteEvent } = useCalendarStore();
+    const { activeEvent, isLoadingEvents, startSavingEvent, startDeleteEvent } = useCalendarStore();
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const [formValues, setFormValues] = useState({
@@ -75,8 +75,6 @@ export const EventModal = () => {
         }
 
         if (formValues.title.length <= 0) return;
-
-        console.log(formValues);
 
         await startSavingEvent(formValues);
         closeEventModal();
@@ -161,11 +159,12 @@ export const EventModal = () => {
 
                     <div className="row justify-content-between">
                         {
-                            !!activeEvent?._id && (
+                            !!activeEvent?.id && (
                                 <div className="col">
                                     <button
                                         onClick={onDeleteEvent}
                                         className="btn btn-danger"
+                                        disabled={isLoadingEvents}
                                     >
                                         <span>Eliminar</span>
                                         <i className="fas fa-trash ms-2"></i>
@@ -178,6 +177,7 @@ export const EventModal = () => {
                             <button
                                 type="submit"
                                 className="btn btn-primary"
+                                disabled={isLoadingEvents}
                             >
                                 <span> Guardar</span>
                                 <i className="fas fa-save ms-2"></i>

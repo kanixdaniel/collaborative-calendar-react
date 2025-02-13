@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { onAddNewEvent, onDeleteEvent, onLoadingEvents, onSetActiveEvent, onSetEvents, onUpdateEvent } from '../redux/calendar';
 import { calendarApi } from '../api';
 import { convertDateOfEvents } from '../calendar/helpers';
+import Swal from 'sweetalert2';
 
 export const useCalendarStore = () => {
     const dispatch = useDispatch();
@@ -16,6 +17,7 @@ export const useCalendarStore = () => {
             dispatch(onSetEvents(events));
         } catch (error) {
             console.error(error);
+            Swal.fire('Error al obtener los eventos', error.response.data.message, 'error');
         }
     }
 
@@ -26,17 +28,20 @@ export const useCalendarStore = () => {
     const startSavingEvent = async (calendarEvent) => {
         dispatch(onLoadingEvents());
         try {
-            if (calendarEvent._id) {
+            if (calendarEvent.id) {
                 // Actualizar
-                dispatch(onUpdateEvent(calendarEvent));
-            } else {
-                // Crear
-                const { data } = await calendarApi.post('/v1/events', calendarEvent)
-                const { event } = data;
-                dispatch(onAddNewEvent({... calendarEvent, id: event.id, user}))
+                await calendarApi.put(`/v1/events/${calendarEvent.id}`, calendarEvent);
+                dispatch(onUpdateEvent({ ...calendarEvent, user }));
+                return;
             }
+
+            // Crear
+            const { data } = await calendarApi.post('/v1/events', calendarEvent)
+            const { event } = data;
+            dispatch(onAddNewEvent({ ...calendarEvent, id: event.id, user }))
         } catch (error) {
             console.error(error);
+            Swal.fire('Error al guardar', error.response.data.message, 'error');
         }
     }
 

@@ -15,7 +15,7 @@ export const Register = () => {
         fullName, email, password, samePassword, formState, onInputChange, onResetForm,
         fullNameError, emailError, passwordError, isPristine
     } = useForm(initialState);
-    const { errorMessage } = useAuthStore();
+    const { errorMessage, startRegister } = useAuthStore();
 
     useEffect(() => {
         if (!!errorMessage) {
@@ -58,7 +58,8 @@ export const Register = () => {
                 'error'
             );
         }
-        console.log(formState);
+        
+        startRegister({fullName, email, password});
     }
 
     return (

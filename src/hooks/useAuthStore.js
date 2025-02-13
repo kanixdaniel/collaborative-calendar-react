@@ -6,11 +6,30 @@ export const useAuthStore = () => {
     const dispatch = useDispatch();
     const { status, user, errorMessage } = useSelector(state => state.auth);
 
-    const startLogin = async (payload) => {
+    const startLogin = async (body) => {
         dispatch(onClearErrorMessage());
         dispatch(onCheckingStatus());
         try {
-            const { data } = await calendarApi.post('/v1/auth/login', payload);
+            const { data } = await calendarApi.post('/v1/auth/login', body);
+            const { token, fullName, uid } = data;
+            sessionStorage.setItem('token', token);
+            sessionStorage.setItem('token-init-date', new Date().getTime());
+            dispatch(onClearErrorMessage());
+            dispatch(onLogin({ fullName, uid }));
+        } catch (error) {
+            console.error(error);
+            dispatch(onLogout(error.response.data.message));
+            setTimeout(() => {
+                dispatch(onClearErrorMessage());
+            }, 10);
+        }
+    }
+
+    const startRegister = async (body) => {
+        dispatch(onClearErrorMessage());
+        dispatch(onCheckingStatus());
+        try {
+            const { data } = await calendarApi.post('/v1/auth/register', body);
             const { token, fullName, uid } = data;
             sessionStorage.setItem('token', token);
             sessionStorage.setItem('token-init-date', new Date().getTime());
@@ -32,5 +51,6 @@ export const useAuthStore = () => {
         errorMessage,
         // Methods
         startLogin,
+        startRegister,
     }
 }

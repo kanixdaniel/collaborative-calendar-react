@@ -3,6 +3,8 @@ import { errorMessages, regExp } from "../shared";
 
 export const useForm = (initialForm = {}) => {
     const [formState, setFormState] = useState(initialForm);
+    const isPristine = JSON.stringify(formState) === JSON.stringify(initialForm);
+    const [isSubmitted, setIsSubmitted] = useState(false);
     useEffect(() => setFormState(initialForm), [initialForm]);
     const [formErrors, setFormErrors] = useState({});
     const isFormValid =  useMemo(() => {
@@ -11,7 +13,7 @@ export const useForm = (initialForm = {}) => {
         }
 
         return true;
-    }, [formErrors])
+    }, [formErrors]);
 
     const onInputChange = ({ target }) => {
         const { value, name } = target;
@@ -36,12 +38,19 @@ export const useForm = (initialForm = {}) => {
         setFormState(initialForm);
     }
 
+    const onSwitchSubmit = async (newValue) => {
+        await setIsSubmitted(newValue);
+    }
+
     return {
         ...formState,
         formState,
+        isPristine,
         ...formErrors,
         isFormValid,
+        isSubmitted,
         onInputChange,
-        onResetForm
+        onResetForm,
+        onSwitchSubmit
     }
 }

@@ -1,18 +1,63 @@
 import { Link } from "react-router"
-import { useForm } from "../../hooks";
+import { useAuthStore, useForm } from "../../hooks";
+import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 const initialState = {
-    fullName: '',
+    fullName: 'Daniel Perez Gonzalez',
     email: '',
     password: '',
     samePassword: '',
 };
 
 export const Register = () => {
-    const { fullName, email, password, samePassword, formState, onInputChange, onResetForm } = useForm(initialState);
+    const {
+        fullName, email, password, samePassword, formState, onInputChange, onResetForm,
+        fullNameError, emailError, passwordError, isPristine
+    } = useForm(initialState);
+    const { errorMessage } = useAuthStore();
+
+    useEffect(() => {
+        if (!!errorMessage) {
+            Swal.fire('Ha ocurrido un problema', errorMessage, 'error');
+        }
+    }, [errorMessage])
 
     const onSubmit = (e) => {
         e.preventDefault();
+        if(isPristine) {
+            return Swal.fire(
+                'Error en formulario',
+                'Debe ingresar información en el formulario',
+                'error'
+            );
+        };
+        
+        if (fullNameError) {
+            return Swal.fire(
+                'Error en formulario',
+                'Debe ingresar un nombre válido',
+                'error'
+            );
+        } else if (emailError) {
+            return Swal.fire(
+                'Error en formulario',
+                'Debe ingresar un correo electrónico válido',
+                'error'
+            );
+        } else if (passwordError) {
+            return Swal.fire(
+                'Error en formulario',
+                'Su contraseña debe de contener al menos 8 caracteres con una minúscula, una mayúscula, un número y un carácter especial',
+                'error'
+            );
+        } else if(password !== samePassword) {
+            return Swal.fire(
+                'Error en formulario',
+                'Las contraseñas deben de ser las mismas',
+                'error'
+            );
+        }
         console.log(formState);
     }
 

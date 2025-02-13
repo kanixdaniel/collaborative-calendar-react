@@ -37,6 +37,11 @@ export const calendarSlice = createSlice({
             state.events = state.events.filter(event => event.id !== state.activeEvent.id);
             state.activeEvent = null;
         },
+        onClearCalendarState: (state) => {
+            state.isLoadingEvents = false;
+            state.events = [];
+            state.activeEvent = null;
+        }
     }
 });
 
@@ -47,4 +52,5 @@ export const {
     onAddNewEvent,
     onUpdateEvent,
     onDeleteEvent,
+    onClearCalendarState
 } = calendarSlice.actions;
